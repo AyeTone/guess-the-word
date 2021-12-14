@@ -8,7 +8,7 @@ const playerMessage = document.querySelector(".message")
 const resetButton = document.querySelector(".play-again")
 
 let word = "magnolia"
-const guessedLetters = []
+let guessedLetters = []
 let remainingGuesses = 8
 
 const getWord = async function () {
@@ -104,6 +104,7 @@ const guessesLeft = function (guess) {
 
   if (remainingGuesses === 0) {
       playerMessage.innerHTML = `Whomp WHOooMP. No more guesses. The word was <span class="highlight">${word}</span>.`
+      startOver ()
   } else if (remainingGuesses === 1) {
       attemptsLeftSpan.innerText = `${remainingGuesses} guess`
   } else {
@@ -118,3 +119,25 @@ const playerWin = function () {
         playerMessage.innerHTML =  `<p class="highlight"> You guessed the correct word. Congrats!</p>`
     }
 }
+
+const startOver = function() {
+    button.classList.add ("hide")
+    guessedLettersElement.classList.add ("hide")
+    attemptsLeft.classList.add ("hide")
+    resetButton.classList.remove ("hide")
+}
+
+resetButton.addEventListener ("click", function (e) {
+    playerMessage.classList.remove("win")
+    guessedLetters.innerHTML = ""
+    playerMessage.innerText = ""
+    remainingGuesses = 8
+    guessedLetters = []
+    attemptsLeftSpan.innerText = `${remainingGuesses} guesses`
+    button.classList.remove ("hide")
+    guessedLettersElement.classList.remove ("hide")
+    attemptsLeft.classList.remove ("hide")
+    resetButton.classList.add ("hide")
+    getWord()
+})
+
