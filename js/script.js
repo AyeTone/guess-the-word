@@ -1,4 +1,4 @@
-const guestedLettersElement = document.querySelector (".guessed-letters");
+const guessedLettersElement = document.querySelector (".guessed-letters");
 const button = document.querySelector(".guess")
 const inputBox = document.querySelector(".letter")
 const wordInProgress = document.querySelector(".word-in-progress")
@@ -37,8 +37,9 @@ const makeGuess = function (guess) {
         playerMessage.innerText = "You have already guessed this letter. Try Again."
     } else {
         guessedLetters.push (guess)
-        console.log(guessedLetters)
+        showGuessedLetter()
     }
+    correctGuess (guessedLetters)
 }
 
 updateGenWord(word)
@@ -54,3 +55,35 @@ button.addEventListener("click", function (e){
     }
     inputBox.value = ""
 })
+
+const showGuessedLetter = function () {
+    guessedLettersElement.innerHTML = ""
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li")
+        li.innerText = letter
+        guessedLettersElement.append(li)
+    }
+}
+
+const correctGuess = function (guests) {
+    const wordUpper = word.toUpperCase()
+    const wordArray = wordUpper.split("")
+    const revealWord = []
+    for (const letter of wordArray) {
+        if (guests.includes(letter)) {
+            revealWord.push (letter.toUpperCase())
+        } else {
+            revealWord.push("●");
+        }
+        wordInProgress.innerText = revealWord.join("")
+    }
+    playerWin ()
+
+}
+
+const playerWin = function () {
+    if (word.toUpperCase () === wordInProgress.innerText) {
+        playerMessage.classList.add("win")
+        playerMessage.innerHTML =  `<p class="highlight"> You guessed the correct word. Congrats!</p>`
+    }
+}
