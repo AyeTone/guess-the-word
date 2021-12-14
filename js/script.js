@@ -7,10 +7,22 @@ const attemptsLeft = document.querySelector(".remaining")
 const playerMessage = document.querySelector(".message")
 const resetButton = document.querySelector(".play-again")
 
-const word = "magnolia"
+let word = "magnolia"
 const guessedLetters = []
+let remainingGuesses = 8
 
-const updateGenWord = function (word) {
+const getWord = async function () {
+    const response = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt")
+    const words = await response.text()
+    const wordArray = words.split("\n")
+    const randomIndex = Math.floor(Math.random() * wordArray.length)
+    word = wordArray[randomIndex].trim()
+    placeholder(word)
+}
+
+getWord ()
+
+const placeholder = function (word) {
     const placeholderLetters = [];
     for (const letter of word) {
         placeholderLetters.push ("●")
@@ -37,12 +49,11 @@ const makeGuess = function (guess) {
         playerMessage.innerText = "You have already guessed this letter. Try Again."
     } else {
         guessedLetters.push (guess)
+        guessesLeft (guess)
         showGuessedLetter()
     }
     correctGuess (guessedLetters)
 }
-
-updateGenWord(word)
 
 button.addEventListener("click", function (e){
     e.preventDefault()
@@ -78,6 +89,26 @@ const correctGuess = function (guests) {
         wordInProgress.innerText = revealWord.join("")
     }
     playerWin ()
+
+}
+
+
+const guessesLeft = function (guess) {
+  const wordUpper = word.toUpperCase()
+  if (!wordUpper.includes(guess)) {
+      playerMessage.innerText = `WRONG! There is no ${guess} in the word.`
+      remainingGuesses -= 1
+  }  else {
+      playerMessage.innerText = `Nice... ${guess} was one. Now get another.`
+  }
+
+  if (remainingGuesses === 0) {
+      playerMessage.innerHTML = `Whomp WHOooMP. No more guesses. The word was <span class="highlight">${word}</span>.`
+  } else if (remainingGuesses === 1) {
+      attemptsLeftSpan.innerText = `${remainingGuesses} guess`
+  } else {
+      attemptsLeftSpan.innerText = `${remainingGuesses} guesses`
+  }
 
 }
 
