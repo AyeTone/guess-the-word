@@ -117,6 +117,7 @@ const playerWin = function () {
     if (word.toUpperCase () === wordInProgress.innerText) {
         playerMessage.classList.add("win")
         playerMessage.innerHTML =  `<p class="highlight"> You guessed the correct word. Congrats!</p>`
+        startOver ()
     }
 }
 
